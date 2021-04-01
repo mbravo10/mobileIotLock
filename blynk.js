@@ -2,8 +2,11 @@
 const blynkToken = 'cCCcQ-JRYBPPQcooxVstS3k9Tdz475Ig';
 const Gpio = require('pigpio').Gpio;
 const Blynk = require('blynk-library'); 
-const blynk = new Blynk.Blynk(blynkToken);
+const blynk = new Blynk.Blynk(blynkToken, options = {
+	connector: new Blynk.TcpClient()
+});
 const v0 = new blynk.VirtualPin(0);
+const v1 = new blynk.VirtualPin(1);
 
 var ledPin = 18;
 var turnedOn = false;
@@ -25,7 +28,10 @@ v0.on('write', (param) => {
 	}else{
 		blynk.notify('Light turned off with unkown param');
 	}
-})
+});
+
+
+
 		
 
 
@@ -33,11 +39,11 @@ function turnOn(){
 	led.digitalWrite(1);
 	turnedOn = true;
 	
-	blynk.notify('Light is turned on');
+	v1.write('Light is turned on');
 }
 
 function turnOff(){
 	led.digitalWrite(0);
 	turnedOn = false;
-	blynk.notify('Light has been turned off');
+	v1.write('Light has been turned off');
 }
